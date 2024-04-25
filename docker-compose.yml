@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: Base_Datos_Estudiantes
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sys
+      MYSQL_USER: root
+      MYSQL_PASSWORD: admin
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  springbootapp:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
