@@ -1,25 +1,28 @@
 version: '3.8'
-
 services:
   mysql:
     image: mysql:8.0
-    container_name: Base_Datos_Estudiantes
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: estudiantes
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
     ports:
       - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: sys
-      MYSQL_USER: root
-      MYSQL_PASSWORD: admin
+    networks:
+      - my-net
     volumes:
       - mysql_data:/var/lib/mysql
-
+      - .docker/setup.sql:/docker-entrypoint-initdb.d/init.sql
   springbootapp:
     build: .
     ports:
       - "8080:8080"
     depends_on:
       - mysql
-
+    networks:
+      - my-net
 volumes:
   mysql_data:
+networks:
+  my-net:
